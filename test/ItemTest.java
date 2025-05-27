@@ -13,8 +13,8 @@ class ItemTest {
         }
 
         @Override
-        public void itemEffect(Pokemon pokemon) {
-            // Implementación dummy
+        public void effect(Pokemon pokemon) {
+
         }
 
         @Override
@@ -60,8 +60,6 @@ class ItemTest {
     @Test
     void testGetNameReturnsUnknownWhenNull() {
         Item item = new TestItem(1) {
-            @Override
-            public void itemEffect(Pokemon pokemon) {}
             @Override
             public String[] getItemInfo() { return new String[0]; }
         };

@@ -23,13 +23,14 @@ public class Potion extends Item {
 	 * @param pokemon Pokémon objetivo de la curación.
 	 */
 	@Override
-	public void itemEffect(Pokemon pokemon) {
-		String[] info = new String[4];
-		info[0] = "Potion"; // nombre del ítem
-		info[1] = "Heals";  // efecto de curación
-		info[2] = Integer.toString(this.healthPoints); // cantidad a curar
-		info[3] = "1"; // duración del efecto
-		pokemon.itemEffect(info);
+	public void effect(Pokemon pokemon) {
+		int maxHealth = pokemon.getMaxHealth();
+		int currentHealth = pokemon.getCurrentHealth();
+		if(currentHealth+this.healthPoints > maxHealth) {
+			pokemon.setCurrentHealth(maxHealth);
+		}else {
+			pokemon.setCurrentHealth(currentHealth + this.healthPoints);
+		}
 	}
 
 	/**

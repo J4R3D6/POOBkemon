@@ -110,7 +110,9 @@ public class State implements Serializable {
         FORCE_SWITCH,
         STATS_PROTECT,
         COPY_ABILITY,
-        ITEM_SWAP
+        ITEM_SWAP,
+        PASS_STATS,
+        COPY_STATS
     }
 
     private StateType type;

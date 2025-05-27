@@ -30,12 +30,7 @@ public abstract class Item implements Serializable {
 	 * Aplica el efecto del ítem al Pokémon si aún no ha sido usado.
 	 * @param pokemon Pokémon al cual se aplica el efecto
 	 */
-	public void effect(Pokemon pokemon){
-		if(!this.isUsed()) {
-			this.amount = this.usedItem();
-			this.itemEffect(pokemon);
-		}
-	}
+	public abstract void effect(Pokemon pokemon);
 
 	/**
 	 * Reduce la cantidad de ítems en uno al ser usado.
@@ -62,13 +57,6 @@ public abstract class Item implements Serializable {
 		if(this.name == null) return "Unknown";
 		return this.name;
 	}
-
-	/**
-	 * Aplica el efecto específico del ítem al Pokémon.
-	 * Debe ser implementado por las subclases.
-	 * @param pokemon Pokémon al que se aplica el efecto
-	 */
-	public abstract void itemEffect(Pokemon pokemon);
 
 	/**
 	 * Retorna la información del ítem en formato de arreglo de Strings.

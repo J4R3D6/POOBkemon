@@ -20,11 +20,10 @@ public class Revive extends Item {
 	 * @param pokemon Pokémon objetivo a revivir.
 	 */
 	@Override
-	public void itemEffect(Pokemon pokemon) {
-		String[] info = new String[4];
-		info[0] = "Potion"; // nombre del ítem
-		info[1] = "Revive"; // efecto de revivir
-		pokemon.itemEffect(info);
+	public void effect(Pokemon pokemon) {
+		pokemon.revive();
+		int maxHealth =  pokemon.getMaxHealth();
+		pokemon.setCurrentHealth((int)maxHealth/2);
 	}
 
 	/**

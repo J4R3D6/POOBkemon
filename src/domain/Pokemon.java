@@ -54,7 +54,7 @@ public final class Pokemon implements Serializable {
 	private int evasionStage = (int)(Math.random() * 13) - 6;
 
 	// Constantes para modificador de batalla
-	private static double criticalHitChance = 0.0417; // 4.17% standar = 0.0417
+	private static double criticalHitChance; // 4.17% standar = 0.0417
 
 	//Variables aplicacion de algunos estados.
 	private boolean canAttack = true;
@@ -70,13 +70,14 @@ public final class Pokemon implements Serializable {
 	 * @param pokemonLvl Nivel inicial del Pokémon
 	 * @throws POOBkemonException si hay error durante la creación
 	 */
-	public Pokemon(int id, String[] info, ArrayList<Integer> attacksIds, boolean random, int pokemonLvl) throws POOBkemonException {
+	public Pokemon(int id, String[] info, ArrayList<Integer> attacksIds, boolean random, int pokemonLvl, int criticalHitChance) throws POOBkemonException {
 		try {
 			if (info.length < 11) throw new POOBkemonException(POOBkemonException.LESS_INFORMACION_POKEMON);
 			this.initStats(id, info, attacksIds, random, pokemonLvl);
 		} catch (POOBkemonException | NumberFormatException e) {
 			Log.record(e);
 		}
+		this.criticalHitChance = criticalHitChance/100 ;
 		this.probShiny();
 	}
 
@@ -349,26 +350,10 @@ public final class Pokemon implements Serializable {
 	 * Revive al Pokémon con la mitad de su vida máxima.
 	 */
 	public void revive() {
-		if(this.currentHealth == 0) {
-			this.currentHealth = this.maxHealth/2;
-		}
 		this.weak = false;
 		this.principalState = null;
 	}
 
-	/**
-	 * Aplica un efecto al Pokémon según la información proporcionada.
-	 * @param info Información del efecto a aplicar
-	 */
-	public void itemEffect(String[] info) {
-		if(info[0].equalsIgnoreCase("Potion") || info[0].equalsIgnoreCase("Revive")) {
-			if(info[1].equalsIgnoreCase("Heals")) {
-				this.heals(Integer.parseInt(info[2]));
-			} else if (info[1].equalsIgnoreCase("Revive")) {
-				this.revive();
-			}
-		}
-	}
 
 	/**
 	 * Genera el ultio ataque cuando todos los ataques tiene 0 PP.
@@ -577,4 +562,8 @@ public final class Pokemon implements Serializable {
 	
 	public int getSpeed() {
 		return this.speed;	}
+
+	public void setCurrentHealth(int currentHealth) {
+		this.currentHealth = currentHealth;
+	}
 }

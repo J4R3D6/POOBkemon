@@ -26,6 +26,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
     private String[] names;
 	private POOBkemon game;
     private int shinyProbability = 10;
+    private int criticalHitChance = 4;
 	//
     private Clip clip;
     private FloatControl volumeControl;
@@ -43,6 +44,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
     private JMenu stats;
     private JMenu volumen;
     private JMenu probShiny ;
+    private JMenu criticalHit;
     //
     private JMenuItem stastBase;
     private JMenuItem stastRamdom;
@@ -56,12 +58,12 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
     private JMenuItem itemSalir;
     private JSlider volumeSlider;
     private JSlider shinySlider;
+    private JSlider criticalHitSlider;
     //
     private int fondo = 0,frame= 0, soundsMenu = 7, soundsBattle = 3;
     private JButton playButton;
     private JButton pokedexButton;
     private JButton itemsButton;
-    private JButton stastRandomButton;
     private JButton exitButton;
     private JButton onePlayer;
     private JButton twoPlayers;
@@ -120,7 +122,12 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         stats = new JMenu("Stats");
         volumen = new JMenu("Volumen");
         probShiny = new JMenu("Shiny");
+        criticalHit = new JMenu("Prob.Golpe Critico");
         //
+        criticalHitSlider = new JSlider(JSlider.HORIZONTAL, 4, 15, this.criticalHitChance);
+        criticalHitSlider.setMajorTickSpacing(1);
+        criticalHitSlider.setPaintLabels(true);
+        criticalHitSlider.setSnapToTicks(true);
         shinySlider = new JSlider(JSlider.HORIZONTAL, 10, 100, this.shinyProbability);
         shinySlider.setMajorTickSpacing(10);
         shinySlider.setPaintLabels(true);
@@ -153,6 +160,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         menuArchivo.addSeparator();
         menuArchivo.add(itemSalir);
         probShiny.add(shinySlider);
+        criticalHit.add(criticalHitSlider);
         volumen.add(volumeSlider);
         frames.add(frame1);
         frames.add(frame2);
@@ -170,6 +178,8 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         menuOption.add(stats);
         menuOption.addSeparator();
         menuOption.add(probShiny);
+        menuOption.addSeparator();
+        menuOption.add(criticalHit);
         menuOption.addSeparator();
         menuOption.add(fondos);
         menuOption.add(frames);
@@ -196,13 +206,14 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         stastBase.addActionListener(e -> {random=false;});
         stastRamdom.addActionListener(e -> {random=true;});
         shinySlider.addChangeListener(e -> {this.game.setProbShiny(shinySlider.getValue());});
+        criticalHitSlider.addChangeListener(e -> {this.game.setCriticalHitChance(criticalHitSlider.getValue());});
         volumeSlider.addChangeListener(e -> {
             int nuevoVolumen = volumeSlider.getValue();
             setVolumen(nuevoVolumen);
         });
     }
     private void prepareIntroductionPanel() {
-    	introductionPanel = new ImagePanel(null, MENU+"start.gif");
+    introductionPanel = new ImagePanel(null, MENU+"start.gif");
         introductionPanel.addHierarchyListener(e -> {
             if ((e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0) {
                 if (introductionPanel.isShowing()) {
@@ -824,6 +835,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         JButton itemButton2= createImageButton("x2", ITEMS+"superPotion.png",1,1,100,100,20,false,false);
         JButton itemButton3 = createImageButton("x2", ITEMS+"hyperPotion.png",1,1,100,100,20,false,false);
         JButton itemButton4 = createImageButton("x1", ITEMS+"revive.png",1,1,100,100,20,false,false);
+        JButton itemButton5 = createImageButton("x1", ITEMS+"maxRevive.png",1,1,100,100,20,false,false);
 
         itemButton1.addActionListener(ev -> {
             String currentPlayer = players.get(contador[0]);
@@ -861,11 +873,21 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
                 mostrarError("Maximo de item", "Ya tiene el maximo de este item");
             }
         });
+        itemButton5.addActionListener(ev -> {
+            String currentPlayer = players.get(contador[0]);
+            if(Integer.parseInt(this.items.get(currentPlayer)[4][1]) < 1){
+                assingItem(contador[0], 4);
+                itemButton5.setText("x"+(1-Integer.parseInt(this.items.get(currentPlayer)[4][1])));
+            } else {
+                mostrarError("Maximo de item", "Ya tiene el maximo de este item");
+            }
+        });
 
         gridPanel.add(itemButton1);
         gridPanel.add(itemButton2);
         gridPanel.add(itemButton3);
         gridPanel.add(itemButton4);
+        gridPanel.add(itemButton5);
         backButtonGameMode.addActionListener(e -> chooseMoves());
         doneButton.addActionListener(ev -> {
             if(contador[0] == 0){
@@ -874,6 +896,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
                 itemButton2.setText("x2");
                 itemButton3.setText("x2");
                 itemButton4.setText("x1");
+                itemButton5.setText("x1");
                 gridPanel.repaint();
                 rightContentPanel.add(characterImage2, BorderLayout.NORTH);
                 rightContentPanel.add(doneButton, BorderLayout.SOUTH);
@@ -981,14 +1004,6 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         enemyPanel.setOpaque(false);
         battleStartPanel.add(playerPanel);
         battleStartPanel.add(enemyPanel);
-        battleStartPanel.addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent e) {
-                int w = battleStartPanel.getWidth();
-                int h = battleStartPanel.getHeight();
-                playerPanel.setBounds((int)(w*0.12),(int)(h*0.541),(int)(w*0.23),(int)(h*0.32));
-                enemyPanel.setBounds((int)(w*0.65),(int)(h*0.145),(int)(w*0.23),(int)(h*0.32));
-            }
-        });
 
         // Panel para contener los GIFs (sin layout para posicionamiento manual)
         JPanel gifContainer = new JPanel(null);
@@ -1003,6 +1018,11 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         gifContainer.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
+                int w = battleStartPanel.getWidth();
+                int h = battleStartPanel.getHeight();
+                playerPanel.setBounds((int)(w*0.12),(int)(h*0.541),(int)(w*0.23),(int)(h*0.32));
+                enemyPanel.setBounds((int)(w*0.65),(int)(h*0.145),(int)(w*0.23),(int)(h*0.32));
+
                 int containerHeight = gifContainer.getHeight();
                 // Escalar el GIF proporcionalmente para que coincida con la altura del contenedor
                 int newWidth = (int) (containerHeight * ((double) originalGif.getIconWidth() / originalGif.getIconHeight()));
@@ -1471,7 +1491,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
     }
     private void prepareItem(){
         for(int i =0 ; i<2; i++) {
-            String[][] items ={{"Potion", "0","25"},{"Potion", "0","50"},{"Potion", "0","100"},{"Revive", "0"}};
+            String[][] items ={{"Potion", "0","25"},{"Potion", "0","50"},{"Potion", "0","100"},{"Revive", "0"},{"MaxRevive", "0"}};
             this.items.put(this.players.get(i), items);
         }
     }
