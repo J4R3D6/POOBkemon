@@ -8,12 +8,12 @@ public class Special extends Attack {
 
 	/**
 	 * Constructor del ataque especial.
-	 * @param idInside ID interno del ataque.
+	 * @param idInGame ID interno del ataque.
 	 * @param info Información del ataque proveniente del repositorio.
 	 * @throws POOBkemonException Si hay error en los datos.
 	 */
-	public Special(int idInside, String[] info) throws POOBkemonException {
-		super(idInside, info);
+	public Special(int idInGame, String[] info) throws POOBkemonException {
+		super(idInGame, info);
 	}
 
 	/**

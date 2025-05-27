@@ -24,6 +24,7 @@ public class Potion extends Item {
 	 */
 	@Override
 	public void effect(Pokemon pokemon) {
+		super.effect(pokemon);
 		int maxHealth = pokemon.getMaxHealth();
 		int currentHealth = pokemon.getCurrentHealth();
 		if(currentHealth+this.healthPoints > maxHealth) {

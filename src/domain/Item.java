@@ -22,7 +22,7 @@ public abstract class Item implements Serializable {
 	 * Devuelve la cantidad disponible del ítem.
 	 * @return Cantidad restante
 	 */
-	public int number(){
+	public int amount(){
 		return amount;
 	}
 
@@ -30,7 +30,7 @@ public abstract class Item implements Serializable {
 	 * Aplica el efecto del ítem al Pokémon si aún no ha sido usado.
 	 * @param pokemon Pokémon al cual se aplica el efecto
 	 */
-	public abstract void effect(Pokemon pokemon);
+	public void effect(Pokemon pokemon){usedItem();};
 
 	/**
 	 * Reduce la cantidad de ítems en uno al ser usado.

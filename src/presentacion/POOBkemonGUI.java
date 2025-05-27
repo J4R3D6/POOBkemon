@@ -27,6 +27,8 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
 	private POOBkemon game;
     private int shinyProbability = 10;
     private int criticalHitChance = 4;
+    private boolean inGame = false;
+    private PokemonBattlePanel battlePanel;
 	//
     private Clip clip;
     private FloatControl volumeControl;
@@ -60,7 +62,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
     private JSlider shinySlider;
     private JSlider criticalHitSlider;
     //
-    private int fondo = 0,frame= 0, soundsMenu = 7, soundsBattle = 3;
+    private int fondo = 0,frame= 0, soundsMenu = 6, soundsBattle = 3;
     private JButton playButton;
     private JButton pokedexButton;
     private JButton itemsButton;
@@ -190,7 +192,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         setJMenuBar(menuBar);
     }
     private void prepareActionsMenuBar() {
-        itemNuevo.addActionListener(e -> refresh(gameMode));
+        itemNuevo.addActionListener(e -> {this.inGame=false;this.battlePanel.stopDecisionTimer();refresh(gameMode);});
         itemAbrir.addActionListener(e -> openGame());
         itemSalvar.addActionListener(e -> saveGame());
         itemSalir.addActionListener(e -> confirmExit());
@@ -582,7 +584,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
                 counterImage.setBounds((int)(w*0.82),(int)(h*0.28),(int)(w*0.2),(int)(h*0.2));
                 counterImage2.setBounds((int)(w*0.82),(int)(h*0.68),(int)(w*0.2),(int)(h*0.2));
                 pokemon.setBounds((int)(w*0.54),(int)(h*0.1),(int)(w*0.30),(int)(h*0.7));
-                addButton.setBounds((int)(w*0.63),(int)(h*0.8),(int)(w*0.1),(int)(h*0.08));
+                addButton.setBounds((int)(w*0.54),(int)(h*0.8),(int)(w*0.30),(int)(h*0.08));
             }
         });
         backButton.addActionListener(e -> chooseCharacter());
@@ -650,6 +652,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+        final int[] turn = {0};
         final int[] pokemonActualIndex = {0};
         for (int i = 1; i <= this.game.getNumMovements(); i++) {
             final Integer pokemonId = i;
@@ -677,6 +680,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
                             }
                         }
                         if (selectedMoves1.size() == this.pokemones.get(players.get(0)).size()*4) {
+                            turn[0]++;
                             imgTrainer1.setVisible(false);
                             imgTrainer2.setVisible(true);
                             gridPanel.setBackgroundImage(MENU + "red.png");
@@ -697,6 +701,8 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
                             turnLabel.setText("Press Done");
                             turnLabel.setForeground(Color.white);
                             doneButton.setVisible(true);
+                            pokemon.setVisible(false);
+                            randomTeam.setVisible(false);
                         }
 
                     } else if (selectedMoves1.size() == this.pokemones.get(players.get(0)).size()*4 && selectedMoves2.size() == this.pokemones.get(players.get(1)).size()*4 && doneButton.isVisible()) {
@@ -708,6 +714,33 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
 
             gridPanel.add(pokemonButton);
         }
+        int jugador1 = (this.pokemones.get(players.get(0)).size()*4) - selectedMoves1.size();
+        int jugador2 = (this.pokemones.get(players.get(1)).size()*4) - selectedMoves2.size();
+        randomTeam.addActionListener(e -> {
+            if(turn[0]==0){
+                for(int i= 0; i < jugador1; i++){
+                    selectedMoves1.add(getNumerRandom(game.getNumMovements()));
+                }
+                turn[0]++;
+                imgTrainer1.setVisible(false);
+                imgTrainer2.setVisible(true);
+                gridPanel.setBackgroundImage(MENU + "red.png");
+                turnLabel.setText(names[1]+" choose moves");
+                turnLabel.setForeground(new Color(255, 100, 100));
+                pokemonActualIndex[0]=this.pokemones.get(players.get(0)).size();
+                pokemon.setBackgroundImage(POKEMONES+"GifNormal/"+pokemones.get(pokemonActualIndex[0])+".gif");
+            }else if(turn[0]==1){
+                for(int i= 0; i < jugador2; i++){
+                    selectedMoves2.add(getNumerRandom(game.getNumMovements()));
+                }
+                gridPanel.setBackgroundImage(MENU + "white.png");
+                turnLabel.setText("Press Done");
+                turnLabel.setForeground(Color.white);
+                doneButton.setVisible(true);
+                pokemon.setVisible(false);
+                randomTeam.setVisible(false);
+            }
+        });
         JPanel nullPanel = new ImagePanel(null, MENU+"nullpng");
         chooseMovesPanel.add(backButton);
         chooseMovesPanel.add(doneButton);
@@ -717,6 +750,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         chooseMovesPanel.add(imgTrainer1);
         chooseMovesPanel.add(pokemon);
         chooseMovesPanel.add(addButton);
+        chooseMovesPanel.add(randomTeam);
         chooseMovesPanel.add(nullPanel);
         chooseMovesPanel.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
@@ -729,7 +763,8 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
                 imgTrainer2.setBounds((int)(w*0.85),(int)(h*0.3),(int)(w*0.13),(int)(h*0.25));
                 scrollPane.setBounds((int)(w*0.03),(int)(h*0.1),(int)(w*0.5),(int)(h*0.76));
                 pokemon.setBounds((int)(w*0.54),(int)(h*0.2),(int)(w*0.30),(int)(w*0.30));
-                addButton.setBounds((int)(w*0.63),(int)(h*0.8),(int)(w*0.1),(int)(h*0.08));
+                addButton.setBounds((int)(w*0.54),(int)(h*0.8),(int)(w*0.30),(int)(h*0.08));
+                randomTeam.setBounds((int)(w*0.54),(int)(h*0.9),(int)(w*0.30),(int)(h*0.08));
             }
         });
         backButton.addActionListener(e -> choosePokemon());
@@ -741,7 +776,6 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         revalidate();
         repaint();
     }
-
     private void chooseItems() {
         JPanel chooseItemsPanel = new ImagePanel(new BorderLayout(), SELECTION_PANEL +getNumerRandom(2)+".png");
         chooseItemsPanel.setOpaque(false);
@@ -983,13 +1017,16 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         refresh(coinPanel);
     }
     private void showTimer(String mode) {
+        this.inGame=true;
         detenerSonido();
         JPanel panel = new ImagePanel(null, MENU+"pantallaDeCarga/"+getNumerRandom(7)+".gif");
         refresh(panel);
         Timer timer3 = new Timer(3000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(inGame){
                 showBattleStart(mode);
+                }
             }
         });
         timer3.setRepeats(false);
@@ -1083,32 +1120,33 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         refresh(battleStartPanel);
     }
     private void startBattle(POOBkemon game) {
-        PokemonBattlePanel battlePanel = new PokemonBattlePanel(game, fondo, frame, order);
-        battlePanel.setBattleListener(playerWon -> {
-            showFinishPanel();
-            this.game = POOBkemon.getInstance();
-        });
-        battlePanel.addHierarchyListener(e -> {
-            if ((e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0) {
-                if (battlePanel.isShowing()) {
-                    reproducirSonido("batalla/"+getNumerRandom(soundsBattle)+".wav");
-                } else {
-                    detenerSonido();
+        if(inGame) {
+            battlePanel = new PokemonBattlePanel(game, fondo, frame, order);
+            battlePanel.setBattleListener(playerWon -> {
+                showFinishPanel();
+                this.game = POOBkemon.getInstance();
+            });
+            battlePanel.addHierarchyListener(e -> {
+                if ((e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0) {
+                    if (battlePanel.isShowing()) {
+                        reproducirSonido("batalla/" + getNumerRandom(soundsBattle) + ".wav");
+                    } else {
+                        detenerSonido();
+                    }
                 }
-            }
-        });
-
-        refresh(battlePanel);
+            });
+            refresh(battlePanel);
+        }
     }
     private void showFinishPanel(){
-        String winnerId = "";
+        String winnerName = "";
         try {
-            winnerId = game.getWinner();
+            winnerName = game.getWinner();
         } catch (POOBkemonException e) {
             Log.record(e);
         }
         JPanel fishPanel = new ImagePanel(new BorderLayout(), WINNER+getNumerRandom(2)+PNG_EXT);
-        JLabel message = new JLabel("Jugador "+winnerId+" a ganado", SwingConstants.CENTER);
+        JLabel message = new JLabel(winnerName+" a ganado", SwingConstants.CENTER);
         message.setFont(cargarFuentePixel(30));
         message.setForeground(Color.WHITE);
         fishPanel.add(message, BorderLayout.CENTER);
@@ -1128,10 +1166,12 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
             if (mode.equals("s")) {
                 this.game.resetGame();
                 this.game = Survive.getInstance();
+                this.game.resetGame();
                 game.initGame(this.players, this.pokemones, this.items, this.moves, false,this.trainersId,this.names);
             } else if (mode.equals("p")) {
                 this.game.resetGame();
                 this.game = POOBkemon.getInstance();
+                this.game.resetGame();
                 game.initGame(this.players, this.pokemones, this.items, this.moves, this.random,this.trainersId,this.names);
             }
             startBattle(game);
@@ -1140,6 +1180,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
             refresh(introductionPanel);
             mostrarError("POOBkemon Error",e.getMessage());
         }
+        this.inGame= true;
     }
     private void reproducirSonido(String sonido) {
         try {
@@ -1462,14 +1503,12 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
     	createMoves();
         prepareItem();
     }
-
     private void createTrainers(){
         this.trainersId = new int[]{0,1};
         this.order = new ArrayList<>();
         this.order.add(trainersId[0]);
         this.order.add(trainersId[1]);
     }
-
     private void createPokemones(){
     	ArrayList<Integer> pokemones1 = new ArrayList<>();
     	ArrayList<Integer> pokemones2 = new ArrayList<>();

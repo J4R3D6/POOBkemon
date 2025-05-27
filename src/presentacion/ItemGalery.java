@@ -46,8 +46,8 @@ public final class ItemGalery extends JPanel implements Auxiliar{
         itemsPanel.add(infoPanel);
 
         //Botones con diseño mejorado
-        JButton upButton = crearBotonEstilizado("▲", new Rectangle(490, 15, 50, 20),new Color(240, 240, 240, 200));
-        JButton downButton = crearBotonEstilizado("▼", new Rectangle(490, 450, 50, 20),new Color(240, 240, 240, 200));
+        JButton upButton = crearBotonEstilizado("Up", new Rectangle(490, 15, 50, 20),new Color(240, 240, 240, 200));
+        JButton downButton = crearBotonEstilizado("Down", new Rectangle(490, 450, 50, 20),new Color(240, 240, 240, 200));
         JButton backButton = crearBotonTransparente("BACK", new Rectangle(30, 395, 130, 40),true);
 
         itemsPanel.add(upButton);

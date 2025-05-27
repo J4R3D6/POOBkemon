@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 public final class PokemonBattlePanel extends JPanel implements Auxiliar {
-    // Constantes de rutas
     // Componentes UI
     private JPanel mainPanel;
     private CardLayout cardLayout;
@@ -661,9 +660,10 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
             itemPanel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    itemName[0] = finalItems[index][0];
-                    itemAmount[0] = finalItems[index][1];
-                    selectItem[0] = true;
+                    if(Integer.parseInt(finalItems[index][1]) > 0){
+                        itemName[0] = finalItems[index][0];
+                        selectItem[0] = true;
+                    }
                 }
             });
             itemPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -676,7 +676,7 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
         panel.add(use);
         use.addActionListener(e -> {
             if (selectItem[0] && selectPokemon[0]) {
-                if (itemName[0].toLowerCase().equalsIgnoreCase("revive") && health[0] > 0) {
+                if (itemName[0].toLowerCase().contains("revive") && health[0] > 0) {
                     mostrarError("Item", "This item cannot be used on Pokémon that are not fainted.");
                 } else if (itemName[0].toLowerCase().contains("potion") && health[0] <= 0) {
                     mostrarError("Item", "This item cannot be used on Pokémon that are fainted.");
@@ -1030,7 +1030,7 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
     /**
      * Detiene el temporizador de decisión
      */
-    private void stopDecisionTimer() {
+    public void stopDecisionTimer() {
         if (decisionTimer != null) {
             decisionTimer.stop();
             decisionTimer = null;
@@ -1094,7 +1094,7 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
             Log.record(e);
         }
         stopDecisionTimer();
-        String[] timeOver = {"timeOver",""+this.currentPlayer,currentPokemons.get(this.currentPlayer)[0]};
+        String[] timeOver = {"timeOver",""+this.currentPlayer, currentPokemons.get(this.currentPlayer)[0]};
         showPanel("attack");
         setDecision(timeOver);
     }

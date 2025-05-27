@@ -87,30 +87,36 @@ class PokemonTest {
     @Test
     void testRevive() {
         pokemon.takeDamage(pokemon.maxHealth + 10); // Debilitar
-        pokemon.revive();
-        
+        Item item = new Revive(1);
+        item.effect(pokemon);
         assertFalse(pokemon.getWeak());
         assertEquals(pokemon.maxHealth / 2, pokemon.currentHealth);
     }
+    @Test
 
-        // Método helper para verificar si el Pokémon es shiny
-    private boolean isShiny(Pokemon p) {
-        // Usamos el método getInfo() que devuelve todos los datos del Pokémon
-        String[] info = p.getInfo();
-        return Boolean.parseBoolean(info[16]); // El índice 16 corresponde a shiny en getInfo()
+    void testMaxRevive() {
+        pokemon.takeDamage(pokemon.maxHealth + 10); // Debilitar
+        Item item = new MaxRevive(1);
+        item.effect(pokemon);
+        assertFalse(pokemon.getWeak());
+        assertEquals(pokemon.maxHealth, pokemon.currentHealth);
     }
 
-    //@Test
-    /*void testShinyProbability() {
-        // Probamos múltiples veces para ver si alguno resulta shiny
-        boolean hasShiny = false;
-        for (int i = 0; i < 1000; i++) {
-            Pokemon testPokemon = new Pokemon(1, TEST_POKEMON_INFO, new ArrayList<>(), false, 5);
-            if (isShiny(testPokemon)) {
-                hasShiny = true;
-                break;
-            }
+    @Test
+    void testShinyProbability() {
+        POOBkemon game = POOBkemon.getInstance();
+        game.setProbShiny(100);
+        Pokemon testPokemon;
+        ArrayList ataques = new ArrayList<>();
+        ataques.add(1);
+        ataques.add(1);
+        ataques.add(1);
+        ataques.add(1);
+        try {
+            testPokemon = new Pokemon(1, TEST_POKEMON_INFO, ataques , false, 5);
+        } catch (POOBkemonException e) {
+            throw new RuntimeException(e);
         }
-        assertTrue(hasShiny); // Estadísticamente debería haber al menos un shiny
-    }*/
+        assertTrue(testPokemon.getShiny()); // Estadísticamente debería haber al menos un shiny
+    }
 }

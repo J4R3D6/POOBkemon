@@ -16,6 +16,7 @@ public class MaxRevive extends Revive {
      */
     @Override
     public void effect(Pokemon pokemon) {
+        super.effect(pokemon);
         pokemon.revive();
         int maxHealth =  pokemon.getMaxHealth();
         pokemon.setCurrentHealth(maxHealth);

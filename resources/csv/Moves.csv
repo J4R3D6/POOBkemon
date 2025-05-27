@@ -98,7 +98,7 @@
 97,Agility,The user relaxes and lightens its body to move faster. This sharply raises the Speed stat.,Psychic,status,0,100,30,ally,speed_up,100
 98,Quick Attack,The user lunges at the target at a speed that makes it almost invisible. This move always goes first.,Normal,physical,40,100,30,,,0
 99,Rage,As long as this move is in use the power of rage raises the Attack stat each time the user is hit in battle.,Normal,physical,20,100,20,,,0
-100,Teleport,Use it to flee from any wild Pokémon. It can also warp to the last Pokémon Center visited.,Psychic,status,0,100,20,ally,,100
+100,Teleport,Use it to flee from any wild Pokémon. It can also warp to the last Pokémon Center visited.,Psychic,status,0,100,20,ally,speed_up,100
 101,Night Shade,The user makes the target see a frightening mirage. It inflicts damage equal to the user's level.,Ghost,special,50,100,15,,,0
 102,Mimic,The user copies the target's last move. The move can be used during battle until the Pokémon is switched out.,Normal,status,0,100,10,ally,copy_move,100
 103,Screech,An earsplitting screech harshly lowers the target's Defense stat.,Normal,status,0,85,40,enemy,defense_down,100
@@ -172,7 +172,7 @@
 171,Nightmare,A sleeping target sees a nightmare that inflicts some damage every turn.,Ghost,status,0,100,15,enemy,nightmare,100
 172,Flame Wheel,The user cloaks itself in fire and charges at the target. This may also leave the target with a burn.,Fire,physical,60,100,25,enemy,burn,10
 173,Snore,An attack that can be used only if the user is asleep. The harsh noise may also make the target flinch.,Normal,special,50,100,15,,flinch,30
-174,Curse,A move that works differently for the Ghost type than for all other types.,Ghost,status,0,100,10,,,100
+174,Curse,A move that works differently for the Ghost type than for all other types.,Ghost,status,0,100,10,enemy,nightmare,100
 175,Flail,The user flails about aimlessly to attack. The less HP the user has the greater the move's power.,Normal,physical,30,100,15,,,0
 176,Conversion 2,The user changes its type to make itself resistant to the type of the attack the opponent used last.,Normal,status,0,100,30,ally,type_change,100
 177,Aeroblast,A vortex of air is shot at the target to inflict damage. Critical hits land more easily.,Flying,special,100,95,5,,,0
@@ -265,7 +265,7 @@
 264,Focus Punch,The user focuses its mind before launching a punch. This move fails if the user is hit before it is used.,Fighting,physical,150,100,20,,,0
 265,Smelling Salts,This attack inflicts double damage on a target with paralysis. This also cures the target’s paralysis however.,Normal,physical,70,100,10,,,0
 266,Follow Me,The user draws attention to itself making all targets take aim only at the user.,Normal,status,0,100,20,ally,redirect,100
-267,Nature Power,An attack that makes use of nature’s power. Its effects vary depending on the user’s environment.,Normal,status,0,100,20,,,0
+267,Nature Power,An attack that makes use of nature’s power. Its effects vary depending on the user’s environment.,Normal,status,0,100,20,ally,redirect,0
 268,Charge,The user boosts the power of the Electric move it uses on the next turn. This also raises the user’s Sp. Def stat.,Electric,status,0,100,20,ally,sp_defense_up,100
 269,Taunt,The target is taunted into a rage that allows it to use only attack moves for three turns.,Dark,status,0,100,20,enemy,taunt,100
 270,Helping Hand,The user assists an ally by boosting the power of that ally’s attack.,Normal,status,0,100,20,ally,power_up,100

@@ -417,4 +417,10 @@ public class POOBkemonTest {
         game.setProbShiny(42);
         assertEquals(42, game.getProbShiny());
     }
+    @Test
+    void testCriticalHitChanceProbability() {
+        assertEquals(4, game.getCriticalHitChance());
+        game.setCriticalHitChance(15);
+        assertEquals(15, game.getCriticalHitChance());
+    }
 }

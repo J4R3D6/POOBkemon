@@ -189,7 +189,8 @@ public class POOBkemon implements Serializable {
 		String[] info = new PokemonRepository().getPokemonById(id);
 		Pokemon pokemon = null;
 		if (!(info.length == 0)) {
-			pokemon = new Pokemon(pokemonId, info, attackIds, this.random, this.pokemonLv, this.criticalHitChance);
+			pokemon = new Pokemon(pokemonId, info, attackIds, this.random, this.pokemonLv);
+			pokemon.setCriticalHitChance(this.criticalHitChance);
 		} else {
 			throw new POOBkemonException(POOBkemonException.POKEMON_ID_NOT_FOUND);
 		}
@@ -277,13 +278,13 @@ public class POOBkemon implements Serializable {
 						String pokemonName = "";
 
 						pokemonName = this.searchPokemon(newPokemonId).getName();
-						movesInGame.add("Player " + decision[1] + " cambió a Pokémon " + pokemonName);
+						movesInGame.add(this.getTeamByTrainerId(Integer.parseInt(decision[1])).getTrainer().getName()+ " cambió a Pokémon " + pokemonName);
 
 						break;
 
 					case "Run":
 						this.run(Integer.valueOf(decision[1]));
-						movesInGame.add("Player " + decision[1] + " huyó de la batalla");
+						movesInGame.add(this.getTeamByTrainerId(Integer.parseInt(decision[1])).getTrainer().getName() + " huyó de la batalla");
 						this.finishBattle = true;
 						break;
 
@@ -292,7 +293,7 @@ public class POOBkemon implements Serializable {
 						int trainerid = Integer.parseInt(decision[1]);
 						int pokemonid = Integer.parseInt(decision[2]);
 						this.timeOver(trainerid, pokemonid);
-						movesInGame.add("Player se le acabo el tiempo");
+						movesInGame.add("A "+this.getTeamByTrainerId(trainerid).getTrainer().getName()+" se le acabo el tiempo");
 						break;
 					default:
 						throw new POOBkemonException(POOBkemonException.ACTION_NOT_FOUND + action);

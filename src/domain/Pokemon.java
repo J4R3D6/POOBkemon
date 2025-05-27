@@ -70,14 +70,13 @@ public final class Pokemon implements Serializable {
 	 * @param pokemonLvl Nivel inicial del Pokémon
 	 * @throws POOBkemonException si hay error durante la creación
 	 */
-	public Pokemon(int id, String[] info, ArrayList<Integer> attacksIds, boolean random, int pokemonLvl, int criticalHitChance) throws POOBkemonException {
+	public Pokemon(int id, String[] info, ArrayList<Integer> attacksIds, boolean random, int pokemonLvl) throws POOBkemonException {
 		try {
 			if (info.length < 11) throw new POOBkemonException(POOBkemonException.LESS_INFORMACION_POKEMON);
 			this.initStats(id, info, attacksIds, random, pokemonLvl);
 		} catch (POOBkemonException | NumberFormatException e) {
 			Log.record(e);
 		}
-		this.criticalHitChance = criticalHitChance/100 ;
 		this.probShiny();
 	}
 
@@ -175,12 +174,20 @@ public final class Pokemon implements Serializable {
 	}
 
 	// Getters and setters
+
+
 	public boolean getActive() { return this.active; }
+
 	public void setActive(boolean active) { this.active = active; }
+
 	public int getId() { return this.id; }
+
 	public String getName() { return this.name; }
+
 	public boolean getWeak() { return this.weak; }
+
 	public ArrayList<Attack> getAttacks() { return this.attacks; }
+
 
 	/**
 	 * Obtener un ataque especifico dado su ID.
@@ -561,9 +568,17 @@ public final class Pokemon implements Serializable {
 	}
 	
 	public int getSpeed() {
-		return this.speed;	}
+		return this.speed;
+    }
+
+    public boolean getShiny(){
+        return this.shiny;
+    }
 
 	public void setCurrentHealth(int currentHealth) {
 		this.currentHealth = currentHealth;
 	}
+    public void setCriticalHitChance(int criticalHitChance){
+        this.criticalHitChance = criticalHitChance/100;
+    }
 }

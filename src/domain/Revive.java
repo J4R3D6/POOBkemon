@@ -21,6 +21,7 @@ public class Revive extends Item {
 	 */
 	@Override
 	public void effect(Pokemon pokemon) {
+		super.effect(pokemon);
 		pokemon.revive();
 		int maxHealth =  pokemon.getMaxHealth();
 		pokemon.setCurrentHealth((int)maxHealth/2);

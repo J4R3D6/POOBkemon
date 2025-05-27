@@ -28,7 +28,7 @@ class ItemTest {
         int expectedNumber = 5;
         Item item = new TestItem(expectedNumber);
         
-        assertEquals(expectedNumber, item.number());
+        assertEquals(expectedNumber, item.amount());
     }
 
     @Test
@@ -36,7 +36,7 @@ class ItemTest {
         int expectedNumber = 3;
         Item item = new TestItem(expectedNumber);
         
-        assertEquals(expectedNumber, item.number());
+        assertEquals(expectedNumber, item.amount());
     }
 
     @Test

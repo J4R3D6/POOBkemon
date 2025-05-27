@@ -42,7 +42,7 @@ public final class Survive extends POOBkemon {
     public Pokemon createPokemon(int id, ArrayList<Integer> attackIds) throws POOBkemonException {
         PokemonRepository info = new PokemonRepository();
         String[] infoPokemon = info.getPokemonById(id);
-        Pokemon pokemon = new Pokemon(pokemonId, infoPokemon, attackIds, this.random, this.pokemonLvlFixed, this.criticalHitChance);
+        Pokemon pokemon = new Pokemon(pokemonId, infoPokemon, attackIds, this.random, this.pokemonLvlFixed);
         this.pokemonId++;
         return pokemon;
     }

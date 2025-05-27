@@ -112,7 +112,21 @@ public class State implements Serializable {
         COPY_ABILITY,
         ITEM_SWAP,
         PASS_STATS,
-        COPY_STATS
+        COPY_STATS,
+        ATTACK_MAX,
+        IGNORE_EVASION,
+        ENDURE,
+        INFATUATION,
+        CURE_STATUS,
+        SAFEGUARD,
+        HP_SHARE,
+        RAIN,
+        SUN,
+        POWER_UP,
+        RECYCLE,
+        ABILITY_SWAP,
+        ELECTRIC_WEAK
+
     }
 
     private StateType type;
