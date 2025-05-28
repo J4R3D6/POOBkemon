@@ -24,9 +24,11 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
     private int currentPlayer;
     private boolean newTurn = true;
     private boolean waitingForMachineDecision = false;
-
+    private boolean changeOfView = false;
     private boolean turnInProgress = false;
     private int frame=0,fondo = 0;
+    private JPanel enemyImagePanel;
+    private  JPanel playerImagePanel;
 
     // Estado de la batalla
     private String[] decisionTrainer1 = null;
@@ -39,19 +41,21 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
     private long pauseStartTime;
     private int remainingPausedTime;
     private boolean paused = false;
+    private boolean animation = false;
 
     @FunctionalInterface
     public interface BattleListener {
         void onBattleEnd(boolean playerWon);
     }
 
-    public PokemonBattlePanel(POOBkemon game,int fondo,int frame,ArrayList<Integer> order) {
+    public PokemonBattlePanel(POOBkemon game,int fondo,int frame,ArrayList<Integer> order,boolean changeOfView) {
         if (game == null) throw new IllegalArgumentException("Game cannot be null");
         this.game = game;
         this.order = order;
         this.currentPlayer = order.get(0);
         this.fondo = fondo;
         this.frame = frame;
+        this.changeOfView = changeOfView;
         initializeUI();
     }
 
@@ -93,8 +97,8 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
         }
 
         JPanel framePanel = new ImagePanel(null,FRAME_ATTACK+this.frame+PNG_EXT);
-        JLabel battleText = new JLabel("What should \n" +currentPokemons.get(this.currentPlayer)[1] + " do?");//game.getPlayerCurrentPokemonName()
-        battleText.setFont(cargarFuentePixel(5));
+        JLabel battleText = new JLabel("Que deberia hacer \n" +currentPokemons.get(this.currentPlayer)[1] + " ?");//game.getPlayerCurrentPokemonName()
+        battleText.setFont(cargarFuentePixel(25));
         battleText.setOpaque(false);
 
         JPanel buttonContainer = new JPanel(new BorderLayout());
@@ -186,7 +190,7 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
                 framePanel.setBounds((int)(w * 0), (int)(h * 0.70), (int)(w * 1), (int)(h * 0.3));
             }
         });
-        if (!game.isMachine(this.currentPlayer) && newTurn) {
+        if (!game.isMachine(this.currentPlayer)) {
             startDecisionTimer();
         }
         panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
@@ -238,7 +242,7 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
         selectedNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
         BarraVidaConImagen selectedHpBar = new BarraVidaConImagen(Integer.parseInt(curentplayer[5]));
-        selectedHpBar.setValue(Integer.parseInt(curentplayer[6]));
+        selectedHpBar.setValueInstant(Integer.parseInt(curentplayer[6]));
 
         JPanel currentPokemonEfect = new ImagePanel(null, STATUS +curentplayer[17]+PNG_EXT);
         currentPokemonPanel.add(selectedPokemonImage);
@@ -312,7 +316,7 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
             nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
             BarraVidaConImagen hpBar = new BarraVidaConImagen(pokemonMaxHPs[i]);
-            hpBar.setValue(pokemonHPs[i]);
+            hpBar.setValueInstant(pokemonHPs[i]);
 
             JPanel pokemonEfect = new ImagePanel(null, STATUS +pokemonEffects[i]+PNG_EXT);
 
@@ -584,7 +588,7 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
             level.setHorizontalAlignment(SwingConstants.CENTER);
             nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
             BarraVidaConImagen hpBar = new BarraVidaConImagen(pokemonMaxHPs[i]);//getPlayerCurrentPokemonMaxHP())
-            hpBar.setValue(pokemonHPs[i]);//getPlayerCurrentPokemonHP() // game.getPlayerCurrentPokemonHP() <(game.getPlayerCurrentPokemonMaxHP()
+            hpBar.setValueInstant(pokemonHPs[i]);//getPlayerCurrentPokemonHP() // game.getPlayerCurrentPokemonHP() <(game.getPlayerCurrentPokemonMaxHP()
             JPanel pokemonEfect = new ImagePanel(null, STATUS +pokemonEfects[i]+PNG_EXT);
             pokemonPanel.add(pokemonEfect);
             pokemonPanel.add(pokemonImage);
@@ -713,18 +717,22 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
         return panel;
     }
     //
-    private JPanel createUpPanel(){
+    private JPanel createUpPanel() {
         HashMap currentPokemons = null;
         try {
             currentPokemons = this.game.getCurrentPokemons();
         } catch (POOBkemonException e) {
             Log.record(e);
         }
-        //final String[] player = (String[]) currentPokemons.get(this.order.get(0));
-        //final String[] enemy = (String[]) currentPokemons.get(this.order.get(1));
-        final String[] player = (String[]) currentPokemons.get(this.currentPlayer==this.order.get(0)?this.order.get(0):this.order.get(1));
-        final String[] enemy = (String[]) currentPokemons.get(this.currentPlayer==this.order.get(0)?this.order.get(1):this.order.get(0));
-
+        final String[] player;
+        final String[] enemy;
+        if (this.changeOfView) {
+            player = (String[]) currentPokemons.get(this.currentPlayer == this.order.get(0) ? this.order.get(0) : this.order.get(1));
+            enemy = (String[]) currentPokemons.get(this.currentPlayer == this.order.get(0) ? this.order.get(1) : this.order.get(0));
+        } else {
+            player = (String[]) currentPokemons.get(this.order.get(0));
+            enemy = (String[]) currentPokemons.get(this.order.get(1));
+        }
         final String playerPokemon = player[16].equals("true")
                 ? BACK_SHINY_PATH + player[2] + PNG_EXT
                 : BACK_PATH + player[2] + PNG_EXT;
@@ -743,8 +751,7 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
         final double playerTargetRatio = 0.72;
         final double enemyTargetRatio = 0.47;
         final int margin = 15;
-
-        JPanel playerImagePanel = new JPanel(null) {
+        this.playerImagePanel = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -752,8 +759,8 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
             }
         };
         playerImagePanel.setOpaque(false);
-
-        JPanel enemyImagePanel = new JPanel(null) {
+        playerImagePanel.setVisible(true);
+        this.enemyImagePanel = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -761,7 +768,7 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
             }
         };
         enemyImagePanel.setOpaque(false);
-
+        enemyImagePanel.setVisible(true);
         JPanel panel = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -769,7 +776,7 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
                 final int h = getHeight();
                 super.paintComponent(g);
                 g.drawImage(bg, 0, 0, w, h, this);
-                g.drawImage(currentPlayerImg, (int)(w * 0.88), (int)(h * 0.01), (int)(w * 0.12), (int)(h * 0.15), this);
+                g.drawImage(currentPlayerImg, (int) (w * 0.88), (int) (h * 0.01), (int) (w * 0.12), (int) (h * 0.15), this);
             }
         };
 
@@ -787,10 +794,18 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
         playerHPLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
         BarraVidaConImagen enemyHPBar = new BarraVidaConImagen(Integer.parseInt(enemy[5]));
-        enemyHPBar.setValue(Integer.parseInt(enemy[6]));
+        if (animation) {
+            enemyHPBar.setValue(Integer.parseInt(enemy[6]));
+        }else{
+            enemyHPBar.setValueInstant(Integer.parseInt(enemy[6]));
+        }
 
         BarraVidaConImagen playerHPBar = new BarraVidaConImagen(Integer.parseInt(player[5]));
-        playerHPBar.setValue(Integer.parseInt(player[6]));
+        if (animation) {
+            playerHPBar.setValue(Integer.parseInt(player[6]));
+        }else{
+            playerHPBar.setValueInstant(Integer.parseInt(player[6]));
+        }
 
         ImagePanel front = new ImagePanel(null, FRONT_FLOOR + fondo + PNG_EXT);
         front.setOpaque(false);
@@ -938,38 +953,130 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
         return panel;
     }
     //
+    /**
+     * Creates and returns a JPanel with animated text displaying the last moves in the game.
+     * The text is progressively revealed within an interactive UI layout, and the panel adjusts
+     * dynamically to component resizing events.
+     *
+     * @return a JPanel containing the animated text display and layout components.
+     */
     private JPanel moveText() {
-        // Crear una copia básica del panel superior
+        animation = true;
         JPanel panel = createUpPanel();
-        JPanel framePanel = new ImagePanel(null,FRAME+this.frame+PNG_EXT);
-        JTextPane battleText = new JTextPane();
-        battleText.setHighlighter(null); // Quita el resaltado de selección
-        battleText.setFocusable(false);  // Evita que reciba foco (y por tanto no se puede seleccionar)
-        battleText.addMouseListener(new MouseAdapter() {});
-        battleText.addMouseMotionListener(new MouseMotionAdapter() {});
-        battleText.setText(this.game.getLastMove());
-        battleText.setFont(cargarFuentePixel(20));
+        HashMap currentPokemons = null;
+        try {
+            currentPokemons = this.game.getCurrentPokemons();
+        } catch (POOBkemonException e) {
+            Log.record(e);
+        }
+        final String[] player;
+        final String[] enemy;
+        if(this.changeOfView) {
+            player = (String[]) currentPokemons.get(this.currentPlayer == this.order.get(0) ? this.order.get(0) : this.order.get(1));
+            enemy = (String[]) currentPokemons.get(this.currentPlayer == this.order.get(0) ? this.order.get(1) : this.order.get(0));
+        }else{
+            player = (String[]) currentPokemons.get(this.order.get(0));
+            enemy = (String[]) currentPokemons.get(this.order.get(1));
+        }
+        final String playerPokemon = player[16].equals("true")
+                ? BACK_SHINY_PATH + player[2] + PNG_EXT
+                : BACK_PATH + player[2] + PNG_EXT;
+        final String enemyPokemon = enemy[16].equals("true")
+                ? GIFSHINY_PATH + enemy[2] + GIF_EXT
+                : GIFNORMAL_PATH + enemy[2] + GIF_EXT;
+        ImagePanel enemyGif = new ImagePanel(new BorderLayout(), MENU+"null.png");
+        if(this.changeOfView) {
+            Timer timer = new Timer(1000, e -> {
+                ImagePanel enemyGifPanel = new ImagePanel(null, enemyPokemon);
+                enemyGif.add(enemyGifPanel, BorderLayout.CENTER);
+                // Asegurar que el panel original sea visible primero
+                this.enemyImagePanel.setVisible(true);
+                // Luego aplicar el cambio
+                SwingUtilities.invokeLater(() -> {
+                    this.enemyImagePanel.setVisible(false);
+                    enemyGif.setBackgroundImage(enemyPokemon);
+                });
+            });
+            timer.setRepeats(false);
+            timer.start();
+        } else {
+            if(currentPlayer == order.get(1)) {
+                Timer timer1 = new Timer(300, e -> {
+                    this.playerImagePanel.setVisible(true); // Asegurar visibilidad primero
+                    Timer timer = new Timer(100, a -> {
+                        this.playerImagePanel.setVisible(false);
+                        Timer restoreTimer = new Timer(100, b -> {
+                            this.playerImagePanel.setVisible(true);
+                        });
+                        restoreTimer.setRepeats(false);
+                        restoreTimer.start();
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
+                });
+                timer1.setRepeats(false);
+                timer1.start();
+            } else {
+                this.enemyImagePanel.setVisible(true); // Asegurar visibilidad primero
+                ImagePanel enemyGifPanel = new ImagePanel(null, enemyPokemon);
+                enemyGif.add(enemyGifPanel, BorderLayout.CENTER);
+                SwingUtilities.invokeLater(() -> {
+                    this.enemyImagePanel.setVisible(false);
+                    enemyGif.setBackgroundImage(enemyPokemon);
+                });
+            }
+        }
+        JPanel framePanel = new ImagePanel(null, FRAME + this.frame + PNG_EXT);
+
+
+        JLabel battleText = new JLabel();
+        battleText.setFont(cargarFuentePixel(25));
         battleText.setOpaque(false);
+        battleText.setForeground(Color.WHITE);
+        battleText.setVerticalAlignment(SwingConstants.TOP);
+
+        framePanel.setLayout(null);
         framePanel.add(battleText);
+
+        String fullText = this.game.getLastMove().replace("\n", "<br>");
+        String htmlStart = "<html><body style='width:100%;'>";
+        String htmlEnd = "</body></html>";
+        final int[] index = {0};
+
+        Timer writer = new Timer(20, null);
+        writer.addActionListener(e -> {
+            if (index[0] < fullText.length()) {
+                battleText.setText(htmlStart + fullText.substring(0, index[0] + 1) + htmlEnd);
+                index[0]++;
+            } else {
+                ((Timer) e.getSource()).stop();
+            }
+        });
+        writer.start();
+
         framePanel.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 int w = framePanel.getWidth();
                 int h = framePanel.getHeight();
-                int fontSize = Math.max(12, h / 24);
-                battleText.setFont(cargarFuentePixel(20));
-                battleText.setForeground(Color.white);
-                battleText.setBounds((int)(w * 0.03), (int)(h * 0.135), (int)(w * 0.93), (int)(h * 0.730));
+                int fontSize = Math.max(24, h / 24);
+                battleText.setFont(cargarFuentePixel(fontSize));
+                battleText.setBounds((int)(w * 0.03), (int)(h * 0.135), (int)(w * 0.94), (int)(h * 0.730));
             }
         });
+
+        panel.setLayout(null);
         panel.add(framePanel);
+        panel.add(enemyGif);
+        panel.setComponentZOrder(enemyGif, 0);
         panel.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 int w = panel.getWidth();
                 int h = panel.getHeight();
-                framePanel.setBounds((int)(w * 0), (int)(h * 0.70), (int)(w * 1), (int)(h * 0.3));
+                framePanel.setBounds(0, (int)(h * 0.70), w, (int)(h * 0.3));
+                enemyGif.setBounds(enemyImagePanel.getX(),enemyImagePanel.getY(),enemyImagePanel.getWidth(),enemyImagePanel.getHeight());
             }
         });
-
+        animation =false;
         return panel;
     }
     //
@@ -1126,6 +1233,7 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
             executeTurn();
         } else if (!game.getFinishBattle()) {
             switchPlayer();
+            showPanel("battle");
         }
     }
 
@@ -1134,9 +1242,8 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
      */
     private void switchPlayer() {
         stopDecisionTimer();
-        newTurn = true;
+        newTurn = this.changeOfView;
         currentPlayer = (currentPlayer == order.get(0)) ? order.get(1) : order.get(0);
-        showPanel("battle");
         // Solo iniciar temporizador si es jugador humano
         if (!game.isMachine(currentPlayer)) {
             startDecisionTimer();
@@ -1153,9 +1260,11 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
                 battleListener.onBattleEnd(false);
                 return;
             }
-            newTurn = true;
+            switchPlayer();
             this.game.takeDecision(decisionTrainer2);
-            Timer timer = new Timer(3000, e -> {
+            Timer timer = new Timer(4000, e -> {
+                showPanel("attack");
+                newTurn = this.changeOfView;
                 showPanel("text");
             });
             newTurn = false;
@@ -1164,7 +1273,7 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
                 battleListener.onBattleEnd(false);
                 return;
             }
-            Timer timer2 = new Timer(6000, e -> {
+            Timer timer2 = new Timer(7000, e -> {
                 resetForNextTurn();
             });
             timer2.setRepeats(false);
@@ -1183,7 +1292,6 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
      */
     private void resetForNextTurn() {
         stopDecisionTimer();
-        newTurn = true;
         decisionTrainer1 = null;
         decisionTrainer2 = null;
         turnInProgress = false;
@@ -1196,8 +1304,6 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
             startDecisionTimer();
         }
     }
-
-
 
     private void machineDecision() {
         stopDecisionTimer();
@@ -1212,34 +1318,6 @@ public final class PokemonBattlePanel extends JPanel implements Auxiliar {
         });
         timer.setRepeats(false);
         timer.start();
-    }
-
-    private void showIntermediatePanel(final String targetPanelName) {
-        // Crear panel intermedio (puedes personalizar esto)
-        JPanel intermediatePanel = new JPanel(new BorderLayout());
-        intermediatePanel.setBackground(new Color(0, 0, 0, 150)); // Fondo semitransparente
-
-        JLabel message = new JLabel("Cargando...", SwingConstants.CENTER);
-        message.setFont(cargarFuentePixel(30));
-        message.setForeground(Color.WHITE);
-        intermediatePanel.add(message, BorderLayout.CENTER);
-
-        intermediatePanel.setName("intermediate");
-        mainPanel.add(intermediatePanel, "intermediate");
-
-        // Mostrar panel intermedio
-        cardLayout.show(mainPanel, "intermediate");
-
-        // Programar la transición al panel objetivo después de un breve retraso
-        Timer transitionTimer = new Timer(10, e -> {
-            // Eliminar panel intermedio
-            mainPanel.remove(intermediatePanel);
-
-            // Volver a llamar a showPanel para el panel objetivo
-            showPanel(targetPanelName);
-        });
-        transitionTimer.setRepeats(false);
-        transitionTimer.start();
     }
 
     public void showPanel(String name) {

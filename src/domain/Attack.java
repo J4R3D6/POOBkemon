@@ -129,7 +129,7 @@ public class Attack implements Serializable {
 	 * @return Mensaje con el resultado del ataque
 	 * @throws POOBkemonException si ocurre un error en el ataque
 	 */
-	public String applyEffect(Pokemon attacker, Pokemon target) throws POOBkemonException {
+	public String applyEffect(Pokemon attacker, Pokemon target){
 		if (!target.canReceiveDamage(attacker)) return "";
 		if (!this.probabilityToHits(attacker, target)) return attacker.getName() + " falló el ataque!";
 

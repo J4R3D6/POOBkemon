@@ -79,7 +79,7 @@ public class StateAttack extends Attack{
      * @throws POOBkemonException Si ocurre un error al obtener el estado desde el repositorio.
      */
     @Override
-    public String applyEffect(Pokemon attacker, Pokemon target) throws POOBkemonException {
+    public String applyEffect(Pokemon attacker, Pokemon target){
         if (!this.probabilityToHits(attacker, target)) {
             return attacker.getName() + " falló el ataque de estado!";
         }

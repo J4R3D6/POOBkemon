@@ -28,6 +28,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
     private int shinyProbability = 10;
     private int criticalHitChance = 4;
     private boolean inGame = false;
+    private boolean changeOfView = false;
     private PokemonBattlePanel battlePanel;
 	//
     private Clip clip;
@@ -44,11 +45,14 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
     private JMenu fondos;
     private JMenu frames;
     private JMenu stats;
+    private JMenu view;
     private JMenu volumen;
     private JMenu probShiny ;
     private JMenu criticalHit;
     //
     private JMenuItem stastBase;
+    private JMenuItem viewBase;
+    private JMenuItem viewFijo;
     private JMenuItem stastRamdom;
     private JMenuItem fondo1;
     private JMenuItem fondo2;
@@ -117,11 +121,12 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
     private void prepareElementsMenu() {
 		menuBar = new JMenuBar();
 		//
-		menuArchivo = new JMenu("File");
-		menuOption = new JMenu("Opcions");
-        fondos = new JMenu("Funds");
-        frames = new JMenu("Frames");
-        stats = new JMenu("Stats");
+		menuArchivo = new JMenu("Archivo");
+		menuOption = new JMenu("Opciones");
+        fondos = new JMenu("Fondo");
+        frames = new JMenu("Borde");
+        stats = new JMenu("Estadisticas");
+        view = new JMenu("Vista");
         volumen = new JMenu("Volumen");
         probShiny = new JMenu("Shiny");
         criticalHit = new JMenu("Prob.Golpe Critico");
@@ -142,6 +147,9 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         volumeSlider.setSnapToTicks(true);
         stastBase = new JMenuItem("Base");
         stastRamdom = new JMenuItem("Ramdom");
+
+        viewBase = new JMenuItem("Rotar");
+        viewFijo = new JMenuItem("Fijo");
         frame1 = new JMenuItem("Dorado");
         frame2 = new JMenuItem("Undertale");
         frame3 = new JMenuItem("Clasico");
@@ -175,9 +183,12 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         fondos.add(fondo3);
         stats.add(stastBase);
         stats.add(stastRamdom);
+        view.add(viewBase);
+        view.add(viewFijo);
         menuOption.add(volumen);
         menuOption.addSeparator();
         menuOption.add(stats);
+        menuOption.add(view);
         menuOption.addSeparator();
         menuOption.add(probShiny);
         menuOption.addSeparator();
@@ -205,6 +216,8 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         frame4.addActionListener(e -> {frame=3;});
         frame5.addActionListener(e -> {frame=4;});
         frame6.addActionListener(e -> {frame=5;});
+        viewBase.addActionListener(e -> {changeOfView=true;});
+        viewFijo.addActionListener(e -> {changeOfView=false;});
         stastBase.addActionListener(e -> {random=false;});
         stastRamdom.addActionListener(e -> {random=true;});
         shinySlider.addChangeListener(e -> {this.game.setProbShiny(shinySlider.getValue());});
@@ -341,7 +354,6 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
                 String name1 = askPlayerName("SetName","Ingrasa tu nombre Player");
                 this.names = new String[]{name1, machine};
                 createTrainers("Player1", machine);
-                prepareItem();
                 chooseCharacter();
             }
     		});
@@ -353,7 +365,6 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
                 String name2 = askPlayerName("SetName","Ingrasa tu nombre Player2");
                 this.names = new String[]{name1, name2};
                 if (modo.equals("Normal")) {
-                    prepareItem();
                     chooseCharacter();
                 } else if (modo.equals("Survival")) {
                     createDataForGame();
@@ -367,7 +378,6 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
                 if(machine1 != null) {
                     this.names = new String[]{machine1, machine2};
                     createTrainers(machine1 + "1", machine2 + "2");
-                    prepareItem();
                     chooseCharacter();
                 }
             }
@@ -777,6 +787,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         repaint();
     }
     private void chooseItems() {
+        prepareItem();
         JPanel chooseItemsPanel = new ImagePanel(new BorderLayout(), SELECTION_PANEL +getNumerRandom(2)+".png");
         chooseItemsPanel.setOpaque(false);
         //
@@ -1121,7 +1132,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
     }
     private void startBattle(POOBkemon game) {
         if(inGame) {
-            battlePanel = new PokemonBattlePanel(game, fondo, frame, order);
+            battlePanel = new PokemonBattlePanel(game, fondo, frame, order, changeOfView);
             battlePanel.setBattleListener(playerWon -> {
                 showFinishPanel();
                 this.game = POOBkemon.getInstance();
@@ -1146,7 +1157,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
             Log.record(e);
         }
         JPanel fishPanel = new ImagePanel(new BorderLayout(), WINNER+getNumerRandom(2)+PNG_EXT);
-        JLabel message = new JLabel(winnerName+" a ganado", SwingConstants.CENTER);
+        JLabel message = new JLabel(winnerName+" ha ganado", SwingConstants.CENTER);
         message.setFont(cargarFuentePixel(30));
         message.setForeground(Color.WHITE);
         fishPanel.add(message, BorderLayout.CENTER);

@@ -91,6 +91,9 @@ public class POOBkemon implements Serializable {
 		this.movesInGame = new ArrayList<>();
 	}
 
+	public static void resetInstance(){
+		game = null;
+	}
 	/**
 	 * Restablece el juego
 	 */
@@ -216,7 +219,7 @@ public class POOBkemon implements Serializable {
 			case "Player" -> new Trainer(id, bagPack, name, pokemons);
 			case "Offensive" -> new Offensive(id, bagPack, name, pokemons);
 			case "Defensive" -> new Defensive(id, bagPack, name, pokemons);
-			//case "Expert" -> new Expert(id, bagPack, name, pokemons);
+			case "Expert" -> new Expert(id, bagPack, name, pokemons);
 			default -> new Switcher(id, bagPack, name, pokemons);
 		};
 	}
@@ -354,7 +357,7 @@ public class POOBkemon implements Serializable {
 		} else {
 			throw new POOBkemonException(POOBkemonException.TRAINER_NOT_FOUND + trainer);
 		}
-		this.setWinner(team);
+		this.searchWinner(team);
 		this.finishBattle = true;
 	}
 

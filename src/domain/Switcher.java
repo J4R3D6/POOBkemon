@@ -43,15 +43,15 @@ public class Switcher extends Machine {
      */
     @Override
     public String[] machineDecision(POOBkemon game) throws POOBkemonException {
-        Pokemon myActive = getPokemonById(getCurrentPokemonId());
+        Pokemon active = getActivePokemon();
         Pokemon opponent = getOpponentActivePokemon(game);
 
-        double typeEffectiveness = calculateTypeEffectiveness(myActive, opponent);
+        double typeEffectiveness = calculateTypeEffectiveness(active, opponent);
 
-        if (shouldSwitchPokemon(myActive, typeEffectiveness)) {
-            return createSwitchDecision(myActive, opponent);
+        if (shouldSwitchPokemon(active, typeEffectiveness)) {
+            return createSwitchDecision(active, opponent);
         }
-        return createAttackDecision(myActive, opponent);
+        return createAttackDecision(active, opponent);
     }
 
     /**
@@ -67,7 +67,7 @@ public class Switcher extends Machine {
                 return team.getTrainer().getPokemonById(currentId);
             }
         }
-        throw new POOBkemonException("No se encontró Pokémon oponente activo");
+        throw new POOBkemonException(POOBkemonException.POKEMON_INACTIVE);
     }
 
     /**
@@ -125,7 +125,7 @@ public class Switcher extends Machine {
         for (Attack atk : attacker.getAttacks()) {
             if (atk.getCurrentPP() > 0) valid.add(atk);
         }
-        if (valid.isEmpty()) throw new POOBkemonException("No hay ataques disponibles para " + attacker.getName());
+        if (valid.isEmpty()) throw new POOBkemonException(POOBkemonException.ATTACK_NOT_FOUND);
         Attack best = selectBestAttack(valid, attacker, opponent);
         return new String[]{"Attack", String.valueOf(best.getIdInGame()), String.valueOf(attacker.getId()), String.valueOf(getId())};
     }

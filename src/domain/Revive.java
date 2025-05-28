@@ -8,10 +8,10 @@ public class Revive extends Item {
 
 	/**
 	 * Crea un revivir con cierta cantidad de usos.
-	 * @param number Cantidad de ítems disponibles.
+	 * @param amount Cantidad de ítems disponibles.
 	 */
-	public Revive(int number) {
-		super(number);
+	public Revive(int amount) {
+		super(amount);
 		this.name = "revive";
 	}
 

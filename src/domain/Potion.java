@@ -9,11 +9,11 @@ public class Potion extends Item {
 
 	/**
 	 * Crea una nueva poción con una cantidad de usos y puntos de curación.
-	 * @param number Cantidad de ítems disponibles.
+	 * @param amount Cantidad de ítems disponibles.
 	 * @param health Cantidad de puntos de vida que cura.
 	 */
-	public Potion(int number, int health) {
-		super(number);
+	public Potion(int amount, int health) {
+		super(amount);
 		this.healthPoints = health;
 		this.createName();
 	}

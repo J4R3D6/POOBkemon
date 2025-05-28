@@ -5,23 +5,51 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="03d6b460-875c-4466-ae73-b209a74458cd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/domain/Expert.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/domain/AttackTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/domain/DefensiveTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/domain/ExpertTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/domain/ItemTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/domain/LogTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/domain/OffensiveTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/domain/PokemonTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/domain/SpecialTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/domain/StateAttackTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/domain/StateTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/domain/SurviveTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/domain/SwitcherTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/domain/TeamTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/domain/TrainerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/csv/Moves.csv" beforeDir="false" afterPath="$PROJECT_DIR$/resources/csv/Moves.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/menu/selectionPanel.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/domain/Attack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/domain/Attack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/domain/BagPack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/domain/BagPack.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/domain/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/domain/Item.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/domain/MaxRevive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/domain/MaxRevive.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/domain/Offensive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/domain/Offensive.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/domain/POOBkemon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/domain/POOBkemon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/domain/Pokemon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/domain/Pokemon.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/domain/Potion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/domain/Potion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/domain/Revive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/domain/Revive.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/domain/Special.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/domain/Special.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/domain/State.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/domain/State.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/domain/Survive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/domain/Survive.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/domain/StateAttack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/domain/StateAttack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/domain/Switcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/domain/Switcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/presentacion/Auxiliar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/presentacion/Auxiliar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/presentacion/BarraVidaConImagen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/presentacion/BarraVidaConImagen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/presentacion/POOBkemonGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/presentacion/POOBkemonGUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/presentacion/PokemonBattlePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/presentacion/PokemonBattlePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/ItemTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/ItemTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/POOBkemonTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/POOBkemonTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/PokemonTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/PokemonTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/AttackTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/DefensiveTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/ItemTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/LogTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/OffensiveTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/POOBkemonTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/PokemonTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SpecialTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/StateAttackTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/StateTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SurviveTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/SwitcherTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/TeamTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/TrainerTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +78,11 @@
     &quot;accountId&quot;: &quot;3351f0a5-0eb2-4dd3-9eb2-21947fbe2729&quot;
   }
 }</component>
+  <component name="JavaAutoRunManager">
+    <enabled-run-configurations>
+      <run-configuration type="JUnit" name="domain in POOBkemon" />
+    </enabled-run-configurations>
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -64,10 +97,13 @@
     "Downloaded.Files.Path.Enabled": "false",
     "JUnit.All in POOBkemon.executor": "Run",
     "JUnit.AttackTest.testCriticalHitCalculation.executor": "Run",
+    "JUnit.ExpertTest.executor": "Run",
     "JUnit.ItemTest.executor": "Run",
     "JUnit.POOBkemonTest.testCriticalHitChanceProbability.executor": "Run",
     "JUnit.PokemonTest.testMaxRevive.executor": "Run",
     "JUnit.PokemonTest.testShinyProbability.executor": "Run",
+    "JUnit.StateTest.executor": "Run",
+    "JUnit.domain in POOBkemon.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Repository.Attach.Annotations": "false",
     "Repository.Attach.JavaDocs": "false",
@@ -84,6 +120,14 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="domain" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="domain" />
+    </key>
+  </component>
   <component name="RunManager" selected="Application.POOBkemonGUI">
     <configuration name="POOBkemonGUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="presentacion.POOBkemonGUI" />
@@ -98,42 +142,48 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="AttackTest.testCriticalHitCalculation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="All in POOBkemon" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="POOBkemon" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="AttackTest" />
-      <option name="METHOD_NAME" value="testCriticalHitCalculation" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="TEST_OBJECT" value="package" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="POOBkemonTest.testCriticalHitChanceProbability" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ExpertTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="POOBkemon" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="POOBkemonTest" />
-      <option name="METHOD_NAME" value="testCriticalHitChanceProbability" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="PACKAGE_NAME" value="domain" />
+      <option name="MAIN_CLASS_NAME" value="domain.ExpertTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PokemonTest.testMaxRevive" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="StateTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="POOBkemon" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="PokemonTest" />
-      <option name="METHOD_NAME" value="testMaxRevive" />
-      <option name="TEST_OBJECT" value="method" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="domain.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="domain" />
+      <option name="MAIN_CLASS_NAME" value="domain.StateTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PokemonTest.testShinyProbability" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="domain in POOBkemon" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="POOBkemon" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="PokemonTest" />
-      <option name="METHOD_NAME" value="testShinyProbability" />
-      <option name="TEST_OBJECT" value="method" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="domain.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="domain" />
+      <option name="TEST_OBJECT" value="package" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -141,10 +191,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.POOBkemonGUI" />
-        <item itemvalue="JUnit.AttackTest.testCriticalHitCalculation" />
-        <item itemvalue="JUnit.POOBkemonTest.testCriticalHitChanceProbability" />
-        <item itemvalue="JUnit.PokemonTest.testMaxRevive" />
-        <item itemvalue="JUnit.PokemonTest.testShinyProbability" />
+        <item itemvalue="JUnit.domain in POOBkemon" />
+        <item itemvalue="JUnit.All in POOBkemon" />
+        <item itemvalue="JUnit.StateTest" />
+        <item itemvalue="JUnit.ExpertTest" />
       </list>
     </recent_temporary>
   </component>
@@ -164,22 +214,12 @@
       <option name="presentableId" value="Default" />
       <updated>1748318731432</updated>
       <workItem from="1748318734570" duration="7022000" />
-      <workItem from="1748376674983" duration="9942000" />
+      <workItem from="1748376674983" duration="28262000" />
+      <workItem from="1748406996526" duration="7972000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/presentacion/POOBkemonGUI.java</url>
-          <line>616</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

@@ -30,7 +30,6 @@ public class BagPack implements Serializable {
 		}
 		return item;
 	}
-
 	/**
 	 * Retorna la información de todos los ítems contenidos en la mochila.
 	 * @return Arreglo bidimensional con la información de los ítems

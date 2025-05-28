@@ -12,10 +12,10 @@ public abstract class Item implements Serializable {
 
 	/**
 	 * Constructor base del ítem.
-	 * @param number Cantidad inicial del ítem
+	 * @param amount Cantidad inicial del ítem
 	 */
-	public Item(int number){
-		this.amount = number;
+	public Item(int amount){
+		this.amount = amount;
 	}
 
 	/**

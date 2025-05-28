@@ -4,10 +4,10 @@ public class MaxRevive extends Revive {
 
     /**
      * Crea un revivir con cierta cantidad de usos.
-     * @param number Cantidad de ítems disponibles.
+     * @param amount Cantidad de ítems disponibles.
      */
-    public MaxRevive(int number) {
-        super(number);
+    public MaxRevive(int amount) {
+        super(amount);
         this.name = "maxRevive";
     }
     /**

@@ -27,10 +27,10 @@ public class Offensive extends Machine {
      */
     @Override
     public String[] machineDecision(POOBkemon game) throws POOBkemonException {
-        Pokemon myActivePokemon = this.getPokemonById(getCurrentPokemonId());
+        Pokemon myActivePokemon = this.getActivePokemon();
 
         if (myActivePokemon == null) {
-            throw new POOBkemonException("No se encontró Pokémon activo");
+            throw new POOBkemonException(POOBkemonException.POKEMON_INACTIVE);
         }
 
         Attack selectedAttack = null;
@@ -42,7 +42,7 @@ public class Offensive extends Machine {
         }
 
         if (selectedAttack == null) {
-            throw new POOBkemonException("No hay ataques disponibles");
+            throw new POOBkemonException(POOBkemonException.ATTACK_NOT_FOUND);
         }
 
         return new String[] {

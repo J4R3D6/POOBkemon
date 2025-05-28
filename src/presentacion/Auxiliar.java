@@ -17,12 +17,15 @@ public interface Auxiliar {
     public static final String POKEDEX = "resources/menu/pokedex/pokedex";
     public static final String TYPES = "resources/pokemones/Emerald/types/";
     public static final String POKEMONES = "resources/pokemones/Emerald/";
+    public static final String GIF_EXT = ".gif";
     public static final String PNG_EXT = ".png";
     public static final String MENU = "resources/menu/";
     public static final String BACK_PATH = POKEMONES + "Back/";
     public static final String BACK_SHINY_PATH = POKEMONES + "BackShiny/";
     public static final String NORMAL_PATH = POKEMONES + "Normal/";
     public static final String SHINY_PATH = POKEMONES + "Shiny/";
+    public static final String GIFNORMAL_PATH = POKEMONES + "GifNormal/";
+    public static final String GIFSHINY_PATH = POKEMONES + "GifShiny/";
     public static final String SONGS =  "resources/songs/";
     public static final String SELECTION_PANEL = "resources/menu/selectionPanel/";
     public static final String ITEMS = "resources/Items/";
