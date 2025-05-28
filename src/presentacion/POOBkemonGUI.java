@@ -203,7 +203,10 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         setJMenuBar(menuBar);
     }
     private void prepareActionsMenuBar() {
-        itemNuevo.addActionListener(e -> {this.inGame=false;this.battlePanel.stopDecisionTimer();refresh(gameMode);});
+        itemNuevo.addActionListener(e -> {
+            this.inGame=false;
+            if(this.battlePanel != null){this.battlePanel.stopDecisionTimer();}
+            refresh(gameMode);});
         itemAbrir.addActionListener(e -> openGame());
         itemSalvar.addActionListener(e -> saveGame());
         itemSalir.addActionListener(e -> confirmExit());
@@ -350,13 +353,19 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
     private void prepareActionsGameMode() {
     	onePlayer.addActionListener(e -> {
     		String machine = chooseMachine("Escoge maquina","Por favor escoger una maquina");
-            if(machine != null) {
-                String name1 = askPlayerName("SetName","Ingrasa tu nombre Player");
-                this.names = new String[]{name1, machine};
-                createTrainers("Player1", machine);
-                chooseCharacter();
+            String name1 = askPlayerName("SetName","Ingrasa tu nombre Player");
+            this.names = new String[]{name1, machine};
+            createTrainers("Player1", machine);
+            String modo = chooseMode("Escoge un modo", "Por favor escoger un modo de juego");
+            if(modo != null) {
+                if (modo.equals("Normal")) {
+                    chooseCharacter();
+                } else if (modo.equals("Survival")) {
+                    createDataForGame();
+                    showTimer("s");
+                }
             }
-    		});
+        });
     	twoPlayers.addActionListener(e -> {
     		createTrainers("Player1","Player2");
             String modo = chooseMode("Escoge un modo", "Por favor escoger un modo de juego");
@@ -376,9 +385,17 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
             if(machine1 != null) {
                 String machine2 = chooseMachine("Escoge maquina2", "Por favor escoger una maquina");
                 if(machine1 != null) {
-                    this.names = new String[]{machine1, machine2};
+                    this.names = new String[]{machine1+"1", machine2+"2"};
                     createTrainers(machine1 + "1", machine2 + "2");
-                    chooseCharacter();
+                    String modo = chooseMode("Escoge un modo", "Por favor escoger un modo de juego");
+                    if(modo != null) {
+                        if (modo.equals("Normal")) {
+                            chooseCharacter();
+                        } else if (modo.equals("Survival")) {
+                            createDataForGame();
+                            showTimer("s");
+                        }
+                    }
                 }
             }
     		});
@@ -788,28 +805,33 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
     }
     private void chooseItems() {
         prepareItem();
-        JPanel chooseItemsPanel = new ImagePanel(new BorderLayout(), SELECTION_PANEL +getNumerRandom(2)+".png");
+        JPanel chooseItemsPanel = new ImagePanel(new BorderLayout(), SELECTION_PANEL + getNumerRandom(2) + ".png");
         chooseItemsPanel.setOpaque(false);
-        //
+
+        // Label para indicar el turno
         JLabel turnLabel = new JLabel("Jugador 1 elige", JLabel.CENTER);
-        turnLabel.setOpaque(true);  // Esto es crucial para que el fondo sea visible
+        turnLabel.setOpaque(true);
         turnLabel.setBackground(new Color(50, 50, 50));
         turnLabel.setFont(cargarFuentePixel(18));
         turnLabel.setForeground(Color.blue);
         chooseItemsPanel.add(turnLabel, BorderLayout.NORTH);
-        //
-        JButton backButtonGameMode = crearBotonEstilizado("Back",new Rectangle(275, 100, 20, 60),new Color(240, 240, 240, 200));
-        //
+
+        // Botón de regreso
+        JButton backButtonGameMode = crearBotonEstilizado("Back", new Rectangle(275, 100, 20, 60), new Color(240, 240, 240, 200));
+
+        // Panel inferior
         JPanel panelSur = new JPanel(new BorderLayout());
         panelSur.setOpaque(false);
         panelSur.add(new JLabel(" "), BorderLayout.SOUTH);
         panelSur.add(backButtonGameMode, BorderLayout.CENTER);
-        //panelSur.add(new JLabel(" "), BorderLayout.WEST);
+
+        // Panel izquierdo
         JPanel leftPanel = new JPanel(new BorderLayout());
         leftPanel.setOpaque(false);
         leftPanel.setPreferredSize(new Dimension((int) (getWidth() * 0.25), getHeight()));
         leftPanel.add(panelSur, BorderLayout.SOUTH);
-        //
+
+        // Personajes
         ImageIcon character = new ImageIcon(CHARACTER + "Bruno.png");
         ImageIcon scaledCharacter = scaleIcon(character, 192, 192);
         JLabel characterImage = new JLabel(scaledCharacter);
@@ -820,22 +842,25 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         JLabel characterImage2 = new JLabel(scaledCharacter2);
         characterImage2.setHorizontalAlignment(JLabel.CENTER);
 
+        // Botón de listo
         JButton doneButton = crearBotonEstilizado("Listo", new Rectangle(275, 100, 100, 60), new Color(240, 240, 240, 200));
         doneButton.setBackground(new Color(200, 200, 200, 150));
 
+        // Panel derecho
         JPanel rightContent = new JPanel(new GridBagLayout());
         rightContent.setOpaque(false);
         JPanel rightContentPanel = new JPanel(new BorderLayout());
         rightContentPanel.setOpaque(false);
-        rightContentPanel.add(characterImage,BorderLayout.NORTH);
-        rightContentPanel.add(doneButton,BorderLayout.SOUTH);
+        rightContentPanel.add(characterImage, BorderLayout.NORTH);
+        rightContentPanel.add(doneButton, BorderLayout.SOUTH);
         rightContent.add(rightContentPanel);
 
         JPanel rightPanel = new JPanel(new BorderLayout());
         rightPanel.setOpaque(false);
         rightPanel.setPreferredSize(new Dimension((int) (getWidth() * 0.25), getHeight()));
-        rightPanel.add(rightContent,BorderLayout.CENTER);
-        //
+        rightPanel.add(rightContent, BorderLayout.CENTER);
+
+        // Panel central con los ítems
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setOpaque(false);
 
@@ -848,6 +873,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
+        // Configuración de teclado para el scroll
         InputMap inputMap = scrollPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = scrollPane.getActionMap();
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0), "up");
@@ -874,14 +900,48 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         scrollContainer.add(scrollPane);
         scrollContainer.add(Box.createVerticalGlue());
         centerPanel.add(scrollContainer, BorderLayout.CENTER);
-        //botones item
-        final int[] contador = {0};
-        JButton itemButton1 = createImageButton("x2", ITEMS+"potion.png",1,1,100,100,20,false,false);
-        JButton itemButton2= createImageButton("x2", ITEMS+"superPotion.png",1,1,100,100,20,false,false);
-        JButton itemButton3 = createImageButton("x2", ITEMS+"hyperPotion.png",1,1,100,100,20,false,false);
-        JButton itemButton4 = createImageButton("x1", ITEMS+"revive.png",1,1,100,100,20,false,false);
-        JButton itemButton5 = createImageButton("x1", ITEMS+"maxRevive.png",1,1,100,100,20,false,false);
 
+        // Creación de botones de ítems
+        final int[] contador = {0};
+
+        // Botón 1 - Poción
+        JButton itemButton1 = createImageButton("x2", ITEMS+"potion.png",1,1,100,100,20,false,false);
+        setupItemHoverPanel(itemButton1, "Poción",
+                "Restaura 20 HP de tu Pokémon.\n\n" +
+                        "Puedes llevar máximo 2.",
+                ITEMS+"potion.png");
+
+        // Botón 2 - Super Poción
+        JButton itemButton2 = createImageButton("x2", ITEMS+"superPotion.png",1,1,100,100,20,false,false);
+        setupItemHoverPanel(itemButton2, "Super Poción",
+                "Restaura 50 HP de tu Pokémon.\n\n" +
+                        "Puedes llevar máximo 2.",
+                ITEMS+"superPotion.png");
+
+        // Botón 3 - Hiperpoción
+        JButton itemButton3 = createImageButton("x2", ITEMS+"hyperPotion.png",1,1,100,100,20,false,false);
+        setupItemHoverPanel(itemButton3, "Hiperpoción",
+                "Restaura 200 HP de tu Pokémon.\n\n" +
+                        "Puedes llevar máximo 2.",
+                ITEMS+"hyperPotion.png");
+
+        // Botón 4 - Revivir
+        JButton itemButton4 = createImageButton("x1", ITEMS+"revive.png",1,1,100,100,20,false,false);
+        setupItemHoverPanel(itemButton4, "Revivir",
+                "Revive un Pokémon debilitado y restaura\n" +
+                        "la mitad de sus HP.\n\n" +
+                        "Puedes llevar máximo 1.",
+                ITEMS+"revive.png");
+
+        // Botón 5 - Revivir Máximo
+        JButton itemButton5 = createImageButton("x1", ITEMS+"maxRevive.png",1,1,100,100,20,false,false);
+        setupItemHoverPanel(itemButton5, "Revivir Máximo",
+                "Revive un Pokémon debilitado y restaura\n" +
+                        "todos sus HP.\n\n" +
+                        "Puedes llevar máximo 1.",
+                ITEMS+"maxRevive.png");
+
+        // Listeners para los botones de ítems
         itemButton1.addActionListener(ev -> {
             String currentPlayer = players.get(contador[0]);
             if(Integer.parseInt(this.items.get(currentPlayer)[0][1]) < 2){
@@ -891,6 +951,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
                 mostrarError("Maximo de item", "Ya tiene el maximo de este item");
             }
         });
+
         itemButton2.addActionListener(ev -> {
             String currentPlayer = players.get(contador[0]);
             if(Integer.parseInt(this.items.get(currentPlayer)[1][1]) < 2){
@@ -900,6 +961,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
                 mostrarError("Maximo de item", "Ya tiene el maximo de este item");
             }
         });
+
         itemButton3.addActionListener(ev -> {
             String currentPlayer = players.get(contador[0]);
             if(Integer.parseInt(this.items.get(currentPlayer)[2][1]) < 2){
@@ -909,6 +971,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
                 mostrarError("Maximo de item", "Ya tiene el maximo de este item");
             }
         });
+
         itemButton4.addActionListener(ev -> {
             String currentPlayer = players.get(contador[0]);
             if(Integer.parseInt(this.items.get(currentPlayer)[3][1]) < 1){
@@ -918,6 +981,7 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
                 mostrarError("Maximo de item", "Ya tiene el maximo de este item");
             }
         });
+
         itemButton5.addActionListener(ev -> {
             String currentPlayer = players.get(contador[0]);
             if(Integer.parseInt(this.items.get(currentPlayer)[4][1]) < 1){
@@ -928,12 +992,16 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
             }
         });
 
+        // Añadir botones al panel
         gridPanel.add(itemButton1);
         gridPanel.add(itemButton2);
         gridPanel.add(itemButton3);
         gridPanel.add(itemButton4);
         gridPanel.add(itemButton5);
+
+        // Listeners para los botones de navegación
         backButtonGameMode.addActionListener(e -> chooseMoves());
+
         doneButton.addActionListener(ev -> {
             if(contador[0] == 0){
                 rightContentPanel.removeAll();
@@ -955,6 +1023,8 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
                 showCoin();
             }
         });
+
+        // Añadir paneles al panel principal
         chooseItemsPanel.add(leftPanel, BorderLayout.WEST);
         chooseItemsPanel.add(centerPanel, BorderLayout.CENTER);
         chooseItemsPanel.add(rightPanel, BorderLayout.EAST);
@@ -962,6 +1032,75 @@ public final class POOBkemonGUI extends JFrame implements Auxiliar{
         setContentPane(chooseItemsPanel);
         revalidate();
         repaint();
+    }
+
+    // Método auxiliar para crear los paneles de información
+    private void setupItemHoverPanel(JButton button, String itemName, String description, String iconPath) {
+        // Crear el panel de información
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BorderLayout(10, 10));
+        infoPanel.setBackground(new Color(30, 30, 30, 220));
+        infoPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(200, 200, 200), 2),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
+
+        // Panel superior con nombre e icono
+        JPanel topPanel = new JPanel(new BorderLayout(10, 0));
+        topPanel.setOpaque(false);
+
+        // Icono del ítem
+        ImageIcon itemIcon = new ImageIcon(iconPath);
+        JLabel iconLabel = new JLabel(scaleIcon(itemIcon, 48, 48));
+
+        // Nombre del ítem
+        JLabel nameLabel = new JLabel(itemName);
+        nameLabel.setFont(cargarFuentePixel(16));
+        nameLabel.setForeground(Color.WHITE);
+
+        topPanel.add(iconLabel, BorderLayout.WEST);
+        topPanel.add(nameLabel, BorderLayout.CENTER);
+
+        // Descripción del ítem
+        JTextArea descArea = new JTextArea(description);
+        descArea.setEditable(false);
+        descArea.setLineWrap(true);
+        descArea.setWrapStyleWord(true);
+        descArea.setBackground(new Color(30, 30, 30, 0));
+        descArea.setForeground(Color.WHITE);
+        descArea.setFont(cargarFuentePixel(12));
+
+        infoPanel.add(topPanel, BorderLayout.NORTH);
+        infoPanel.add(descArea, BorderLayout.CENTER);
+
+        // Configurar el popup
+        JPopupMenu popup = new JPopupMenu();
+        popup.setBorder(BorderFactory.createEmptyBorder());
+        popup.add(infoPanel);
+
+        // Listeners para mostrar/ocultar el panel
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                Point p = button.getLocationOnScreen();
+                popup.setLocation(p.x + button.getWidth() + 10, p.y);
+                popup.setVisible(true);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                popup.setVisible(false);
+            }
+        });
+
+        // Hacer que el panel siga al cursor
+        button.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                Point p = button.getLocationOnScreen();
+                popup.setLocation(p.x + button.getWidth() + 10, p.y);
+            }
+        });
     }
     private void showCoin(){
         int[] player1 = {0};

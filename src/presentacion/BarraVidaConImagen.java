@@ -15,12 +15,13 @@ public class BarraVidaConImagen extends JComponent {
 
     // Márgenes
     private int paddingIzq = 40;
-    private int paddingTop =2 ;
+    private int paddingTop = 2;
     private int paddingBottom = 2;
 
-    public BarraVidaConImagen( int max) {
+    public BarraVidaConImagen(int max) {
         this.valorMaximo = max;
         this.valorActual = max;
+        this.valorObjetivo = max;
 
         // Cargar imagen de fondo
         ImageIcon icon = new ImageIcon("resources/menu/barra.png");
@@ -54,7 +55,7 @@ public class BarraVidaConImagen extends JComponent {
         int barraWidth = width - paddingIzq;
         int barraHeight = height - paddingTop - paddingBottom;
 
-        // Calcular ancho del progreso
+        // Calcular ancho del progreso usando valorActual para la animación
         double porcentaje = (double) valorActual / valorMaximo;
         int anchoProgreso = (int) (barraWidth * porcentaje);
 
@@ -82,38 +83,52 @@ public class BarraVidaConImagen extends JComponent {
 
     public void setValue(int value) {
         valorObjetivo = Math.min(Math.max(value, 0), valorMaximo);
-        final int inicio = valorActual;
-        final int cambio = valorObjetivo - inicio;
 
-        if (cambio == 0) return; // No hay nada que animar
+        // Si ya estamos en el valor objetivo, no hacer animación
+        if (valorActual == valorObjetivo) {
+            return;
+        }
 
+        // Si hay una animación en curso, detenerla y usar el valor actual como punto de partida
         if (animacion != null && animacion.isRunning()) {
             animacion.stop();
         }
 
+        final int inicio = valorActual;
+        final int cambio = valorObjetivo - inicio;
+        final long startTime = System.currentTimeMillis();
         final int duracion = 300; // duración total en ms
-        final int delay = 15;     // intervalo de actualización
-        final int pasos = duracion / delay;
-        final double[] t = {0.0}; // progreso normalizado
 
-        animacion = new Timer(delay, null);
-        animacion.addActionListener(e -> {
-            t[0] += 1.0 / pasos;
-            if (t[0] >= 1.0) {
-                valorActual = valorObjetivo;
-                animacion.stop();
-            } else {
-                double easing = t[0] * (2 - t[0]); // ease-out
-                valorActual = inicio + (int) Math.round(cambio * easing);
-            }
+        animacion = new Timer(16, e -> { // ~60 FPS
+            long elapsed = System.currentTimeMillis() - startTime;
+            float progreso = Math.min(elapsed / (float)duracion, 1.0f);
+
+            // Aplicar easing cuadrático para suavizar
+            float easedProgreso = easeOutQuad(progreso);
+
+            valorActual = inicio + (int)(cambio * easedProgreso);
             repaint();
+
+            if (progreso >= 1.0f) {
+                ((Timer)e.getSource()).stop();
+                valorActual = valorObjetivo; // Asegurar valor exacto al final
+            }
         });
 
         animacion.start();
     }
 
+    // Función de easing cuadrático para suavizar la animación
+    private float easeOutQuad(float t) {
+        return t * (2 - t);
+    }
+
     public void setValueInstant(int value) {
         valorActual = Math.min(Math.max(value, 0), valorMaximo);
+        valorObjetivo = valorActual;
+        if (animacion != null && animacion.isRunning()) {
+            animacion.stop();
+        }
         repaint();
     }
 }
